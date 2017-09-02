@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		18E3EF081F58B2A9008B7242 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E3EF071F58B2A9008B7242 /* AppDelegate.swift */; };
-		18E3EF0A1F58B2A9008B7242 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E3EF091F58B2A9008B7242 /* ViewController.swift */; };
+		18E3EF0A1F58B2A9008B7242 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E3EF091F58B2A9008B7242 /* MapViewController.swift */; };
 		18E3EF0D1F58B2A9008B7242 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18E3EF0B1F58B2A9008B7242 /* Main.storyboard */; };
 		18E3EF101F58B2A9008B7242 /* PokemonGoClone.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 18E3EF0E1F58B2A9008B7242 /* PokemonGoClone.xcdatamodeld */; };
 		18E3EF121F58B2A9008B7242 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18E3EF111F58B2A9008B7242 /* Assets.xcassets */; };
@@ -18,12 +18,13 @@
 /* Begin PBXFileReference section */
 		18E3EF041F58B2A9008B7242 /* PokemonGoClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PokemonGoClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18E3EF071F58B2A9008B7242 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		18E3EF091F58B2A9008B7242 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		18E3EF091F58B2A9008B7242 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		18E3EF0C1F58B2A9008B7242 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		18E3EF0F1F58B2A9008B7242 /* PokemonGoClone.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PokemonGoClone.xcdatamodel; sourceTree = "<group>"; };
 		18E3EF111F58B2A9008B7242 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		18E3EF141F58B2A9008B7242 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		18E3EF161F58B2A9008B7242 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		18E3EF1C1F58B2C9008B7242 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,6 +41,7 @@
 		18E3EEFB1F58B2A9008B7242 = {
 			isa = PBXGroup;
 			children = (
+				18E3EF1C1F58B2C9008B7242 /* README.md */,
 				18E3EF061F58B2A9008B7242 /* PokemonGoClone */,
 				18E3EF051F58B2A9008B7242 /* Products */,
 			);
@@ -57,7 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				18E3EF071F58B2A9008B7242 /* AppDelegate.swift */,
-				18E3EF091F58B2A9008B7242 /* ViewController.swift */,
+				18E3EF091F58B2A9008B7242 /* MapViewController.swift */,
 				18E3EF0B1F58B2A9008B7242 /* Main.storyboard */,
 				18E3EF111F58B2A9008B7242 /* Assets.xcassets */,
 				18E3EF131F58B2A9008B7242 /* LaunchScreen.storyboard */,
@@ -139,7 +141,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18E3EF0A1F58B2A9008B7242 /* ViewController.swift in Sources */,
+				18E3EF0A1F58B2A9008B7242 /* MapViewController.swift in Sources */,
 				18E3EF101F58B2A9008B7242 /* PokemonGoClone.xcdatamodeld in Sources */,
 				18E3EF081F58B2A9008B7242 /* AppDelegate.swift in Sources */,
 			);
