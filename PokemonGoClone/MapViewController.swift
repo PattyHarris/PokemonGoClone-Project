@@ -43,17 +43,43 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
             // Otherwise, we'll need to ask again....
             manager.requestWhenInUseAuthorization()
         }
+        
+        // Scedule a repeating timer for every 5 seconds.
+        Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { (timer) in
+            if let regionCenter = self.manager.location?.coordinate {
+                
+                let mapAnnotation = MKPointAnnotation()
+                var coordinate = regionCenter
+                
+                // The 200 gives a number between 0 - 199.  The -100 gives us
+                // the positive or negative randomness.  The / 50000.0 gives us the
+                // 0.00N we need to add to the coordinates..
+                
+                let randomLatitude = (Double(arc4random_uniform(200)) - 100.0) / 50000.0
+                let randomLongitude = (Double(arc4random_uniform(200)) - 100.0) / 50000.0
+                
+                coordinate.latitude += randomLatitude
+                coordinate.longitude += randomLongitude
+                
+                mapAnnotation.coordinate = coordinate
+                
+                self.mapView.addAnnotation(mapAnnotation)
+                
+            }
+            
+        }
     }
     
     // Handle the user's new location and zoom into that location.  E.g. where is the user right now.
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         // 1. Make a region - the location manager has the center of the current region.
-        // For the Pokemon game, 1000 by 1000  seems to work (according to Nick).
+        // For the Pokemon game, 200 by 200  seems to work (according to Nick).  This puts
+        // you at a closer street view...
         if let regionCenter = manager.location?.coordinate {
             
             if updateCountLimit > 0 {
-                let region = MKCoordinateRegionMakeWithDistance(regionCenter, 1000, 1000)
+                let region = MKCoordinateRegionMakeWithDistance(regionCenter, 200, 200)
                 
                 // 2. Set the region in the mapView - you can set animated to true, but that will cause a
                 // big zoom in (or out) as the app renders.
@@ -61,8 +87,25 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
                 
                 updateCountLimit -= 1
             }
+            else {
+                // Tell the manager to stop updating the location.
+                manager.stopUpdatingLocation()
+            }
         }
         
     }
+    
+    // Center the location in the view.
+    @IBAction func compassButtonDidTap(_ sender: Any) {
+        if let regionCenter = manager.location?.coordinate {
+            
+            let region = MKCoordinateRegionMakeWithDistance(regionCenter, 200, 200)
+            
+            // In this case, animation is true...
+            mapView.setRegion(region, animated: true)
+            
+        }
+    }
+    
 }
 
