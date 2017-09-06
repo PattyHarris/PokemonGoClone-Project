@@ -9,12 +9,15 @@
 import UIKit
 import MapKit
 
-class MapViewController: UIViewController, CLLocationManagerDelegate {
+class MapViewController: UIViewController,
+                         CLLocationManagerDelegate, MKMapViewDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
     
     var manager : CLLocationManager = CLLocationManager()
     
+    var allPokemons : [Pokemon] = []
+
     // The updateCountLimit allows the location manager to update the location several times,
     // basically to get it right the first time.  Then we turn it off so that it allows the
     // user to move the location and zoom in and out.  Otherwise, the location manager snaps
@@ -32,6 +35,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         // need the custom privacy items in the plist.
         
         manager.delegate = self
+        mapView.delegate = self
+        
+        allPokemons = getAllPokemons()
         
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             // Set the current location and tell the location manager to
@@ -48,7 +54,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { (timer) in
             if let regionCenter = self.manager.location?.coordinate {
                 
-                let mapAnnotation = MKPointAnnotation()
                 var coordinate = regionCenter
                 
                 // The 200 gives a number between 0 - 199.  The -100 gives us
@@ -61,6 +66,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
                 coordinate.latitude += randomLatitude
                 coordinate.longitude += randomLongitude
                 
+                // Use the PokemonAnnotation class instead of the MKPointAnnotation
+                // let mapAnnotation = MKPointAnnotation()
+                let randomIndex = Int( arc4random_uniform( UInt32(self.allPokemons.count) ) )
+                let pokemon = self.allPokemons[randomIndex]
+                let mapAnnotation = PokemonAnnotation(coordinate: regionCenter, pokemon: pokemon)
                 mapAnnotation.coordinate = coordinate
                 
                 self.mapView.addAnnotation(mapAnnotation)
@@ -69,6 +79,40 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
             
         }
     }
+
+    // Mark: MKMapViewDelegate
+
+    // Return a Pokemon
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        let mkAnnotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: nil)
+        
+        // If it's a location annotation, replace it with a player icon.
+        if annotation is MKUserLocation {
+            mkAnnotationView.image = UIImage(named: "player-1")
+        }
+        else {
+            // If the annotation is a PokemonAnnotation, create an image using
+            // the image name.
+            
+            if let annotation = annotation as? PokemonAnnotation {
+                if let imageName = annotation.pokemon.imageName {
+                    mkAnnotationView.image = UIImage(named: imageName)
+                }
+            }
+        }
+        
+        // Resize the image...
+        var frame = mkAnnotationView.frame
+        frame.size.height = 40
+        frame.size.width = 40
+        
+        mkAnnotationView.frame = frame
+        
+        return mkAnnotationView
+    }
+    
+    // Mark: CLLocationManagerDelegate
     
     // Handle the user's new location and zoom into that location.  E.g. where is the user right now.
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -107,5 +151,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
+    @IBAction func PokeBallButtonDidTap(_ sender: Any) {
+    }
 }
+
 

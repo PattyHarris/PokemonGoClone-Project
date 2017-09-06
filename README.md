@@ -32,6 +32,9 @@
     warning.  That leaves a overlapping warnng which is solved with a left constraint.  These
     appear to be new to XCode 9.
     
+    If you set the constraints on the button BEFORE you set the image, XCode seems to behave a
+    bit better.
+    
     5. Compass button is used to center the current location in the view.  The logic for setting
     the initial location is used here as well.
     
@@ -47,6 +50,48 @@
     Run this in the playground to see the types of numbers generated.  You need to play around
     with the numbers used in this tutorial to make it work for your needs - e.g. we started
     the region with 1000 by 1000 and then narrowed that down to 200 by 200 (more at the street level)
+    
+### List of Caught and Uncaught Pokemons
+    
+    1. Before adding real Pokemon figures to the mapView, first add the pokeball as a button
+    to the mapView.  Tapping this button will segue to a view that holds a list of caught
+    and uncaught Pokemons.  The segue is a "prsent modally" - the idea here is that tapping
+    the button automatically brings up the next view.
+    
+    2. A ViewController contains the list of caught and uncaught Pokemans on a tableView
+    We need to use a VC that contains a TV and not just add a TableViewController since we
+    need to add a button to the bottom of the view.  Add a button that sits on top of the tableView -
+    this will be a "return to map" button - so the map.png is added to assests from the Pokemon
+    collection.  The layout for this button is the same as the Pokeball button.
+
+### Core Data
+
+    1. The Pokemon entity includes a name, caught boolean, and the Pokemon image name.
+    Ensure that all attributes are NOT optional.  The default for the caught boolean is "no"
+    CoreDataHelper was created to handle the Core Data methods needed for handling
+    the Pokemon entities.  A helper file, CoreDataHelper, contains the code for adding and
+    retrieving the core data items.
+
+### Adding Pokemons to the Map
+
+    1. To add th pokemons to the map, set the mapView delegate (to self, which also means the
+    MapViewController needs to extend or inherit from MKMapViewDelegate).  With this, the
+    mapView "view for annotation" can be overridden to provide Pokemon characters.  This also
+    changes the moving icon, so we imported a "player" icon.  A check is needed to determine
+    if the annotation is a "user location" - if it is, set it to the player icon.
+    
+    2. PokemonAnnotation is used to replace MKAnnoatation when setting up the timer - that way,
+    a special Pokemon can be used for the annotation.  To make the images random, create a
+    random number between 0 and the count of pokemons retrieved from the database (allpokemons).
+    
+### Catching a Pokemon
+
+    1.
+    
+    
+    
+    
+    
     
     
     
