@@ -40,17 +40,23 @@ class MapViewController: UIViewController,
         allPokemons = getAllPokemons()
         
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-            // Set the current location and tell the location manager to
-            // start watching
-            mapView.showsUserLocation = true
-            manager.startUpdatingLocation()
+            setupLocation()
         }
         else {
             // Otherwise, we'll need to ask again....
             manager.requestWhenInUseAuthorization()
         }
+    }
+    
+    // Mark: Setup helper
+    func setupLocation() {
         
-        // Scedule a repeating timer for every 5 seconds.
+        // Set the current location and tell the location manager to
+        // start watching
+        mapView.showsUserLocation = true
+        manager.startUpdatingLocation()
+
+        // Schedule a repeating timer for every 5 seconds.
         Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { (timer) in
             if let regionCenter = self.manager.location?.coordinate {
                 
@@ -76,8 +82,39 @@ class MapViewController: UIViewController,
                 self.mapView.addAnnotation(mapAnnotation)
                 
             }
-            
         }
+
+    }
+    
+    // Mark: Alert helper
+
+    func showCaughtAlert(name: String) {
+        let alertController = UIAlertController(title: "Yeah!", message: "You caught a \(name)!",
+                                                preferredStyle: .alert)
+
+        let pokedexAction = UIAlertAction(title: "Pokedex", style: .default) { (action) in
+            // Show the PokedexViewController.
+            self.performSegue(withIdentifier: "toPokedexSegue", sender: nil)
+        }
+        
+        let okAction = UIAlertAction(title: "Ok", style: .default) { (alert) in
+            alertController.dismiss(animated: true, completion: nil)
+        }
+        
+        alertController.addAction(pokedexAction)
+        alertController.addAction(okAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+
+    func showUnCaughtAlert(name: String) {
+        let alertController = UIAlertController(title: "Bummer!",
+                                                message: "You are too far away from the \(name) to catch it",
+                                                preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        
+        alertController.addAction(alertAction)
+        present(alertController, animated: true, completion: nil)
     }
 
     // Mark: MKMapViewDelegate
@@ -112,6 +149,55 @@ class MapViewController: UIViewController,
         return mkAnnotationView
     }
     
+    // An annotation is selected
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        // Deselect the selected annotation to allow it to be selected again.
+        mapView.deselectAnnotation(view.annotation, animated: true)
+        
+        // Only work with non-trainers
+        if view.annotation is MKUserLocation {
+            // Do nothing
+        }
+        else {
+            // Zoom in on the location of the annotation and then check whether the
+            // user is still on the map.
+            if let regionCenter = manager.location?.coordinate {
+                
+                if let pokemonCenter = view.annotation?.coordinate {
+                    
+                    let region = MKCoordinateRegionMakeWithDistance(pokemonCenter, 200, 200)
+                    
+                    // In this case, animation is false since true might cause this to be slow...
+                    mapView.setRegion(region, animated: false)
+                    
+                    // Bool here is really unnecessary, but helps explain the code...
+                    let isContained = MKMapRectContainsPoint(mapView.visibleMapRect, MKMapPointForCoordinate(regionCenter))
+                    
+                    if isContained {
+                        
+                        // You can catch the Pokemon - Nick put the save code here,
+                        // but it's better as part of the CoreDataHelper...
+                        
+                        if let annotation = view.annotation as? PokemonAnnotation {
+                            saveCaughtPokemon(pokemon: annotation.pokemon)
+                            
+                            if let name = annotation.pokemon.name {
+                                showCaughtAlert(name: name)
+                            }
+                        }
+                    }
+                    else {
+                        // The Pokemon is not in range
+                        if let annotation = view.annotation as? PokemonAnnotation,
+                            let name = annotation.pokemon.name {
+                                showUnCaughtAlert(name: name)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     // Mark: CLLocationManagerDelegate
     
     // Handle the user's new location and zoom into that location.  E.g. where is the user right now.
@@ -138,6 +224,17 @@ class MapViewController: UIViewController,
         }
         
     }
+    
+    // Handler this function so we can run setup once the authorization has been given
+    // to use the maps...
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .authorizedWhenInUse {
+            setupLocation()
+        }
+
+    }
+    
+    // Mark: Button handerl
     
     // Center the location in the view.
     @IBAction func compassButtonDidTap(_ sender: Any) {

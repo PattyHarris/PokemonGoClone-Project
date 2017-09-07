@@ -40,7 +40,7 @@
                                 <state key="normal" image="pokeball"/>
                                 <connections>
                                     <action selector="PokeBallButtonDidTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XBb-d3-fpG"/>
-                                    <segue destination="K2O-Sc-qxt" kind="presentation" id="gdb-PT-b9f"/>
+                                    <segue destination="K2O-Sc-qxt" kind="presentation" identifier="toPokedexSegue" id="gdb-PT-b9f"/>
                                 </connections>
                             </button>
                         </subviews>

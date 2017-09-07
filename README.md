@@ -86,8 +86,28 @@
     
 ### Catching a Pokemon
 
-    1.
+    1. mapView's method "did select annotation" is called when an annotation is selected.
+    The selected annotation needs to be "deselected" to allow further selection - otherwise,
+    you can only select the annotation once.
     
+    2. Zoom in on the selected annotation (as long as it's not a trainer) and check whether
+    the trainer is still on the map.
+    
+    3. To set the Pokemon as caught, it's a simple matter of setting caught to true and
+    saving the context (I added another Core Data helper function to handle the simple task).
+    
+    4. Alerts are shown when the user successfully or unsuccessfully catches a Pokemon (seems
+    like there is a better way to show success/failure).  On success, segue to the Pokedex VC -
+    the segue needs to have an ID to performSegue withIdentifier...
+    
+    
+### Fixing the First Time Use
+
+    When the app is first launched, it showed the US with the normal annotation symbol.  This is
+    due the the logic which sets the timer only if the "ok to use" setting has been set - first
+    time, it's not going to be set.  So the logic which sets up the timer and user location
+    is added to a setup function.  This function is then called if authorization has already
+    been set and AFTER it's been authorized (see location manager didChangeAuthorization)
     
     
     

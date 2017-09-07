@@ -37,6 +37,16 @@ func createPokemon(name: String, imageName: String) {
         
 }
 
+func saveCaughtPokemon(pokemon: Pokemon) {
+    if let context  =
+        ((UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext) {
+        
+        pokemon.caught = true
+        try? context.save()
+    }
+
+}
+
 // Return all the Pokemons in Core Data
 func getAllPokemons() -> [Pokemon] {
     
